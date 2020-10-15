@@ -1,0 +1,15 @@
+mmp_card_consume_record_#year_#month: |
+  CREATE TABLE `mmp_card_consume_record` (
+  `card_consume_record_id` bigint(20) unsigned NOT NULL COMMENT '主键Id',
+  `card_no` bigint(20) unsigned NOT NULL COMMENT '卡号',
+  `consume_number` int(11) unsigned DEFAULT NULL COMMENT '等级消费次数',
+  `consume_value` decimal(30,2) DEFAULT NULL COMMENT '等级消费金额',
+  `old_consume_number` int(11) unsigned DEFAULT NULL COMMENT '旧等级消费次数',
+  `old_consume_value` decimal(30,2) DEFAULT NULL COMMENT '旧等级消费金额',
+  `operation_type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '操作类型',
+  `operation_type_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '操作类型名称',
+  `operation_object_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '操作对象ID',
+  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+  PRIMARY KEY (`card_consume_record_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='会员卡消费金额、次数变更记录表';
+

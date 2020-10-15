@@ -1,0 +1,52 @@
+spring:
+#  datasource:
+#    url: jdbc:mysql://192.168.53.100:3306/mmp_watsons_junjie?useUnicode=true&characterEncoding=UTF8&serverTimezone=CTT
+#    type: com.zaxxer.hikari.HikariDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: promotion_app
+#    password: promotion_app
+  shardingsphere:
+    props:
+      sql:
+        show: true
+
+    datasource:
+      names: mmp
+      mmp:
+        jdbc-url: jdbc:mysql://192.168.53.100:3306/mmp_watsons_junjie?useUnicode=true&characterEncoding=UTF8&serverTimezone=CTT
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: promotion_app
+        password: promotion_app
+      # 还没有确定这段配置是否会生效
+    #      hikari:
+    #        connection-timeout: 30000
+    #        idle-timeout: 600000
+    #        max-lifetime: 1800000
+    #        minimumIdle: 10
+    #        maximum-pool-size: 100
+    sharding:
+      binding-tables:
+        - mmp_card, mmp_card_extend
+
+      tables:
+        mmp_card:
+          actual-data-nodes: mmp.mmp_card_$->{0..2}
+          table-strategy:
+            inline:
+              sharding-column: card_no
+              algorithm-expression: mmp_card_$->{card_no % 3}
+
+        mmp_card_extend:
+          actual-data-nodes: mmp.mmp_card_extend_$->{0..2}
+          table-strategy:
+            inline:
+              sharding-column: card_no
+              algorithm-expression: mmp_card_extend_$->{card_no % 3}
+
+        mmp_card_consume_record:
+          actual-data-nodes:  mmp.mmp_card_consume_record_${2020..2021}
+          table-strategy:
+            standard:
+              sharding-column: create_at
+              precise-algorithm-class-name: fun.mytoys.shardingspherejdbc.config.shardingsphere.YearShardingAlgorithm
